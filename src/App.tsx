@@ -1,16 +1,16 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
 import './App.css';
-import CButton from './components/button/button';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function App() {
-    const handleClick = (): void => {
-        console.log('click');
-    };
     return (
-        <div className="App">
-            <CButton label="Ola" onClick={handleClick} />
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Home />} />
+            </Routes>
+        </Router>
     );
 }
 
