@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
+import 'bootstrap'; // Import Bootstrap JavaScript
 import '../../css/sidebar.css';
 import { useAuth } from '../../conf/useAuth';
 import { Button } from 'react-bootstrap';
