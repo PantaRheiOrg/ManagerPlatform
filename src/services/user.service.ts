@@ -4,7 +4,6 @@ import {
     UserDTO,
     UserLoginDTO,
     UserUpdateDTO,
-    UserAddDTO,
 } from './../models/IUser';
 import createAxiosClient from '../conf/axiosInstance';
 import { AxiosInstance } from 'axios';
@@ -20,12 +19,7 @@ class UserService {
         this.axiosClient = createAxiosClient();
     }
 
-    async postUser(data: UserAddDTO): Promise<UserSignUpDTO> {
-        const response = await this.axiosClient.post(resourceUser, data);
-        return response.data;
-    }
-
-    async postAuthenticate(data: UserLoginDTO): Promise<UserAuthResponse> {
+    async login(data: UserLoginDTO): Promise<UserAuthResponse> {
         const response = await this.axiosClient.post(
             resourceAuthenticate,
             data
@@ -33,25 +27,18 @@ class UserService {
         return response.data;
     }
 
-    async postRegister(data: UserSignUpDTO): Promise<UserAuthResponse> {
+    async register(data: UserSignUpDTO): Promise<UserAuthResponse> {
         const response = await this.axiosClient.post(resourceRegister, data);
         return response.data;
     }
 
-    async get(id: number | null): Promise<string | UserDTO[] | UserDTO> {
+    async getUser(id: number | null): Promise<string | UserDTO[] | UserDTO> {
         const response = await this.axiosClient.get(`/${resourceUser}/${id}`);
         return response.data;
     }
 
-    async put(data: UserUpdateDTO): Promise<string | UserDTO> {
+    async updateUser(data: UserUpdateDTO): Promise<string | UserDTO> {
         const response = await this.axiosClient.put(`/${resourceUser}`, data);
-        return response.data;
-    }
-
-    async delete(id: number): Promise<string> {
-        const response = await this.axiosClient.delete(
-            `/${resourceUser}/${id}`
-        );
         return response.data;
     }
 }

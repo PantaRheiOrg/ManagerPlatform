@@ -33,7 +33,7 @@ const createAxiosClient = (token: string | null = null): AxiosInstance => {
             if (error.response?.status === 401) {
                 localStorage.removeItem('ACCESS_TOKEN');
             }
-            throw error;
+            throw error.response?.data;
         }
     );
 
