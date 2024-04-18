@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
             { path: '', element: <Home /> },
             { path: 'login', element: <Login /> },
             {
-                path: 'test',
+                path: 'home',
                 element: (
                     <ProtectedRoute>
                         <Home />
