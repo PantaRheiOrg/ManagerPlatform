@@ -1,16 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
+import { Outlet } from 'react-router-dom';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import { UserProvider } from './conf/useAuth';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function App() {
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Home />} />
-            </Routes>
-        </Router>
+        <UserProvider>
+            <Outlet />
+            <ToastContainer />
+        </UserProvider>
     );
 }
 
