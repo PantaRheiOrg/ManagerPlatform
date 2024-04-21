@@ -20,7 +20,7 @@ const createAxiosClient = (token: string | null = null): AxiosInstance => {
     });
 
     client.interceptors.request.use((config) => {
-        const newToken = localStorage.getItem('ACCESS_TOKEN');
+        const newToken = localStorage.getItem('token');
         if (newToken) {
             config.headers.Authorization = `Bearer ${newToken}`;
         }
@@ -31,7 +31,7 @@ const createAxiosClient = (token: string | null = null): AxiosInstance => {
         (response: AxiosResponse) => response,
         (error: AxiosError) => {
             if (error.response?.status === 401) {
-                localStorage.removeItem('ACCESS_TOKEN');
+                localStorage.removeItem('token');
             }
             throw error.response?.data;
         }

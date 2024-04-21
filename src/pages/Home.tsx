@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/sidebar/sidebar';
 import Footer from '../components/footer/footer';
+import Main from '../components/main/main';
 
 const Home: React.FC = () => {
     //we need this for the future to hide option depending on users permissons
@@ -13,13 +14,14 @@ const Home: React.FC = () => {
     return (
         <div className="d-flex">
             <Sidebar navItems={navItems} />
-            <div className="container-fluid">
-                <div>
-                    <h1>Main Content</h1>
-                    <p>This is the main content area of the page.</p>
-                    <p>You can add more elements here to fill out the page.</p>
+            <div className="flex-grow-1">
+                <div
+                    className="container-fluid"
+                    style={{ paddingLeft: '250px' }}
+                >
+                    <Main></Main>
+                    <Footer></Footer>
                 </div>
-                <Footer></Footer>
             </div>
         </div>
     );

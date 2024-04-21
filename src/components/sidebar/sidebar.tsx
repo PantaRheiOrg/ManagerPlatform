@@ -17,7 +17,15 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
     return (
         <nav
             className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar-full-height"
-            style={{ width: '250px' }}
+            style={{
+                width: '250px',
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                height: '100%',
+                overflowY: 'auto' /* Enable vertical scrolling */,
+                zIndex: '1000' /* Ensure the sidebar is above other content */,
+            }}
         >
             <a
                 href="/g"

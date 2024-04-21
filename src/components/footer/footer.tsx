@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
                         </svg>
                     </a>
                     <span className="mb-3 mb-md-0 text-muted">
-                        &copy; 2022 Company, Inc
+                        &copy; 2024 Pnta, Inc
                     </span>
                 </div>
 
