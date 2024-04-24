@@ -41,9 +41,11 @@
     border-right: none; /* Remove top border for table header */
     border-left: none;
     border-bottom: none; /* Remove right border for th */
+    font-family: 'Poppins', sans-serif;
 }
 
 .table th {
+   
     background-color: #f8f9fa; /* Header background color */
     font-weight: bold;
     border-top: none; /* Remove top border for table header */

@@ -106,7 +106,12 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
                     <tbody>
                         {filteredItems.map((user, index) => (
                             <tr key={index}>
-                                <td className="text-center">{user.userId}</td>
+                                <td
+                                    className="text-center"
+                                    style={{ fontWeight: 'bold' }}
+                                >
+                                    {user.userId}
+                                </td>
                                 <td>{user.fname + ' ' + user.lname}</td>
                                 <td>{user.email}</td>
                                 <td>{user.phoneNumber}</td>
