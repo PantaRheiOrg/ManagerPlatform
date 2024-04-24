@@ -30,7 +30,7 @@ export interface UserUpdateDTO {
 }
 
 export interface UserDTO {
-    id?: number;
+    userId?: number;
     email?: string;
     fname?: string;
     lname?: string;

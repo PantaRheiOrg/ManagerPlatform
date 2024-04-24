@@ -9,12 +9,12 @@ import VenueInfo from '../venueInfo/venueInfo';
 import StaffTable from '../staffTable/staffTable';
 import '../../css/main.css'; // Import CSS file for custom styling
 import { UserDTO } from '../../models/IUser';
+import ReviewCard from '../reviewCard/reviewCard';
 
 const Main: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [venueData, setVenueData] = useState<VenueDTO | null>(null);
     const [userData, setUserData] = useState<UserDTO[]>([]); // Assuming UserDTO is the type for user data
-
     useEffect(() => {
         const fetchVenueData = async () => {
             try {
@@ -44,9 +44,25 @@ const Main: React.FC = () => {
                 <div>Loading...</div>
             ) : venueData ? (
                 <>
-                    <h1 className="main-title">Welcome to {venueData.name}</h1>
-                    <div className="row">
-                        <div className="col-md-6">g</div>
+                    <div className="row custom-height-md">
+                        <div className="col-md-6">
+                            <div className="row mb-5 mt-4">
+                                <div className="col-md-6">
+                                    <ReviewCard />
+                                </div>
+                                <div className="col-md-6">
+                                    <ReviewCard />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-md-6">
+                                    <ReviewCard />
+                                </div>
+                                <div className="col-md-6">
+                                    <ReviewCard />
+                                </div>
+                            </div>
+                        </div>
                         <div className="col-md-6">
                             <StaffTable userData={userData}></StaffTable>
                         </div>

@@ -2,9 +2,9 @@ import React from 'react';
 import Sidebar from '../components/sidebar/sidebar';
 import Footer from '../components/footer/footer';
 import Main from '../components/main/main';
+import '../css/home.css';
 
 const Home: React.FC = () => {
-    //we need this for the future to hide option depending on users permissons
     const navItems = [
         { href: '/venue', text: 'Venue', icon: '#noIcon' },
         { href: '/menus', text: 'Menus', icon: '#noIcon' },
@@ -12,12 +12,14 @@ const Home: React.FC = () => {
         { href: '/location', text: 'Location', icon: '#noIcon' },
     ];
     return (
-        <div className="d-flex">
+        <div className="d-flex bgcolor">
             <Sidebar navItems={navItems} />
             <div className="flex-grow-1">
                 <div
                     className="container-fluid"
-                    style={{ paddingLeft: '250px' }}
+                    style={{
+                        paddingLeft: '250px',
+                    }}
                 >
                     <Main></Main>
                     <Footer></Footer>
