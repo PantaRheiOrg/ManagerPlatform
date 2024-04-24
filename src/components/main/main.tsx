@@ -1,15 +1,19 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useEffect, useState } from 'react';
 import VenueService from '../../services/venue.service';
+import UserVenueService from '../../services/userVenue.service';
 import { VenueDTO } from '../../models/IVenue';
 import LocationInfo from '../locationInfo/locationInfo';
 import MenuInfo from '../menuInfo/menuInfo';
 import VenueInfo from '../venueInfo/venueInfo';
+import StaffTable from '../staffTable/staffTable';
 import '../../css/main.css'; // Import CSS file for custom styling
+import { UserDTO } from '../../models/IUser';
 
 const Main: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [venueData, setVenueData] = useState<VenueDTO | null>(null);
+    const [userData, setUserData] = useState<UserDTO[]>([]); // Assuming UserDTO is the type for user data
 
     useEffect(() => {
         const fetchVenueData = async () => {
@@ -18,6 +22,10 @@ const Main: React.FC = () => {
                     const venueService = new VenueService();
                     const data = await venueService.getVenueByToken();
                     setVenueData(data);
+                    const userVenueService = new UserVenueService();
+                    const userDataResponse =
+                        await userVenueService.getVenueByToken(data.venueId);
+                    setUserData(userDataResponse);
                 } else {
                     throw new Error('Token not found');
                 }
@@ -30,7 +38,6 @@ const Main: React.FC = () => {
 
         fetchVenueData();
     }, []);
-
     return (
         <div className="main-container">
             {loading ? (
@@ -38,6 +45,12 @@ const Main: React.FC = () => {
             ) : venueData ? (
                 <>
                     <h1 className="main-title">Welcome to {venueData.name}</h1>
+                    <div className="row">
+                        <div className="col-md-6">g</div>
+                        <div className="col-md-6">
+                            <StaffTable userData={userData}></StaffTable>
+                        </div>
+                    </div>
                     <VenueInfo venueData={venueData} />
                     <div className="menu-section">
                         <h2 className="section-title">Menus</h2>
