@@ -5,19 +5,17 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faPencil,
-    faSearch,
-    faTrashAlt,
-} from '@fortawesome/free-solid-svg-icons';
-import { Pagination, Form } from 'react-bootstrap';
+import { faPencil, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { Pagination, Form } from 'react-bootstrap'; // Import Modal and Button
+import EditStaffModel from '../model/editStaffModel';
 import '../../css/staffTable.css';
 
 const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-
-    const itemsPerPage = 5;
+    const [selectedUser, setSelectedUser] = useState<number | undefined>();
+    const [model, setModel] = useState(false);
+    const ITEMSPERPAGE = 5;
 
     const handleAddStaff = (): void => {
         console.log('Add staff functionality should be implemented here.');
@@ -29,8 +27,8 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
         // Implement delete staff functionality
     };
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const indexOfLastItem = currentPage * ITEMSPERPAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
     const currentItems = userData.slice(indexOfFirstItem, indexOfLastItem);
 
     const paginate = (pageNumber: number): void => setCurrentPage(pageNumber);
@@ -50,6 +48,18 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
             user.phoneNumber?.includes(searchTerm)
         );
     });
+
+    const handleEditUser = (user: number | undefined): void => {
+        setSelectedUser(user);
+        setModel(true);
+    };
+    const handleClose = (): void => {
+        setModel(false);
+    };
+    const handleSave = (userId: number | undefined): void => {
+        console.log('saved user id ' + userId);
+        setModel(false);
+    };
 
     return (
         <div className="compnentStaffTableP">
@@ -118,9 +128,11 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
                                 <td>
                                     <FontAwesomeIcon
                                         icon={faPencil}
-                                        style={{ marginRight: '12px' }}
+                                        onClick={() =>
+                                            handleEditUser(user.userId)
+                                        } // Call handleEditUser on click
+                                        style={{ cursor: 'pointer' }} // Add cursor pointer
                                     />
-                                    <FontAwesomeIcon icon={faTrashAlt} />
                                 </td>
                             </tr>
                         ))}
@@ -131,7 +143,7 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
             <div className="d-flex justify-content-center">
                 <Pagination>
                     {Array.from(
-                        { length: Math.ceil(userData.length / itemsPerPage) },
+                        { length: Math.ceil(userData.length / ITEMSPERPAGE) },
                         (_, i) => (
                             <Pagination.Item
                                 key={i}
@@ -144,6 +156,12 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
                     )}
                 </Pagination>
             </div>
+            <EditStaffModel
+                userId={selectedUser}
+                show={model}
+                handleClose={handleClose}
+                handleSave={handleSave}
+            />
         </div>
     );
 };
