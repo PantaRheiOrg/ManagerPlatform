@@ -6,6 +6,7 @@ const resourceVenueWorkers: string = 'manageUserVenue/getVenueWorkers';
 const resourceSetVenueStaff: string = 'manageUserVenue/setVenueStaff';
 const resourceSetVenueManager: string = 'manageUserVenue/setVenueManager';
 const resourceRemoveVenueUser: string = 'manageUserVenue/removeVenueUser';
+const resourceAddVenueUser: string = 'manageUserVenue/addVenueWorker';
 class UserVenueService {
     private axiosClient: AxiosInstance;
 
@@ -16,6 +17,12 @@ class UserVenueService {
     async getVenueUsersbById(id: number): Promise<Array<AllUserVenueDTO>> {
         const response = await this.axiosClient.get(
             `/${resourceVenueWorkers}/${id}`
+        );
+        return response.data;
+    }
+    async addVenueStaff(userId: number, venueId: number): Promise<null> {
+        const response = await this.axiosClient.post(
+            `/${resourceAddVenueUser}/${userId}/${venueId}`
         );
         return response.data;
     }

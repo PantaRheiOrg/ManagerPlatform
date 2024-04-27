@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { AllUserVenueDTO } from '../../models/IUser';
 import Table from 'react-bootstrap/Table';
-import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Pagination, Form } from 'react-bootstrap';
+import { Pagination, Form, Button } from 'react-bootstrap';
 import EditStaffModel from '../model/editStaffModel';
 import '../../css/staffTable.css';
 import UserVenueService from '../../services/userVenue.service';
 import { Roles } from '../../models/IUserVenue';
+import AddStaffModel from '../model/addStaffModel';
 
 const StaffTable: React.FC<{
     userData: AllUserVenueDTO[];
@@ -21,17 +20,9 @@ const StaffTable: React.FC<{
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUser, setSelectedUser] = useState<number>();
     const [model, setModel] = useState(false);
+    const [modelAdd, setModelAdd] = useState(false);
+
     const ITEMSPERPAGE = 5;
-
-    const handleAddStaff = (): void => {
-        console.log('Add staff functionality should be implemented here.');
-        // Implement add staff functionality
-    };
-
-    const handleDeleteStaff = (): void => {
-        console.log('Delete staff functionality should be implemented here.');
-        // Implement delete staff functionality
-    };
 
     const indexOfLastItem = currentPage * ITEMSPERPAGE;
     const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
@@ -69,7 +60,13 @@ const StaffTable: React.FC<{
     const handleClose = (): void => {
         setModel(false);
     };
+    const handleCloseAdd = (): void => {
+        setModelAdd(false);
+    };
 
+    const openAddUserModel = (): void => {
+        setModelAdd(true);
+    };
     const handleSave = (role: Roles | null): void => {
         const userVenueService = new UserVenueService();
 
@@ -98,6 +95,15 @@ const StaffTable: React.FC<{
 
         setModel(false);
     };
+    const handleAdd = (userId: number): void => {
+        const userVenueService = new UserVenueService();
+
+        userVenueService.addVenueStaff(userId, venueId).catch((error) => {
+            console.error(error);
+        });
+        reRenderList();
+        setModelAdd(false);
+    };
 
     return (
         <div className="compnentStaffTableP">
@@ -108,19 +114,15 @@ const StaffTable: React.FC<{
                 </div>
 
                 <div>
-                    <DropdownButton
-                        id="dropdown-basic-button"
-                        title="Manage Staff"
-                        variant="secondary"
-                        className="action-dropdown"
+                    <Button
+                        variant="success"
+                        onClick={() => openAddUserModel()}
                     >
-                        <Dropdown.Item onClick={handleAddStaff}>
-                            Add Staff
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={handleDeleteStaff}>
-                            Delete Staff
-                        </Dropdown.Item>
-                    </DropdownButton>
+                        Add Staff
+                    </Button>
+                    {
+                        //buton
+                    }
                 </div>
             </div>
             <div className="d-flex align-items-center flex-grow-1">
@@ -148,6 +150,7 @@ const StaffTable: React.FC<{
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone Number</th>
+                            <th>Role</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -165,12 +168,33 @@ const StaffTable: React.FC<{
                                 <td>{user.phoneNumber}</td>
                                 <td>
                                     {user.venueRole === 'VENUE_STAFF_ROLE' ? (
-                                        <span>Staff</span>
+                                        <span
+                                            style={{
+                                                color: 'orange',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            Staff
+                                        </span>
                                     ) : user.venueRole ===
                                       'VENUE_MANAGER_ROLE' ? (
-                                        <span>Manager</span>
+                                        <span
+                                            style={{
+                                                color: 'red',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            Manager
+                                        </span>
                                     ) : (
-                                        <span>Admin</span>
+                                        <span
+                                            style={{
+                                                color: 'orange',
+                                                fontWeight: '600',
+                                            }}
+                                        >
+                                            Admin
+                                        </span>
                                     )}
                                 </td>
                                 <td>
@@ -208,6 +232,11 @@ const StaffTable: React.FC<{
                 show={model}
                 handleClose={handleClose}
                 handleSave={handleSave}
+            />
+            <AddStaffModel
+                show={modelAdd}
+                handleClose={handleCloseAdd}
+                handleAdd={handleAdd}
             />
         </div>
     );
