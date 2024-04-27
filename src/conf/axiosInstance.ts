@@ -30,10 +30,7 @@ const createAxiosClient = (token: string | null = null): AxiosInstance => {
     client.interceptors.response.use(
         (response: AxiosResponse) => response,
         (error: AxiosError) => {
-            if (
-                error.response?.status === 401 ||
-                error.response?.status === 403
-            ) {
+            if (error.response?.status === 401) {
                 localStorage.removeItem('token');
             }
             throw error.response?.data;
