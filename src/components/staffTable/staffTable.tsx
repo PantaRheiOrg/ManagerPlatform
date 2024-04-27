@@ -33,7 +33,7 @@ const StaffTable: React.FC<{
         setAlerVariant(variant);
         setTimeout(() => {
             setAlertMessage('');
-        }, 3000);
+        }, 2000);
     };
 
     const handleSearchChange = (
@@ -45,11 +45,16 @@ const StaffTable: React.FC<{
 
     const filteredItems = userData
         .filter((user) => {
-            return (
-                user.fname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.lname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                user.phoneNumber?.includes(searchTerm)
+            // Split the search term into separate words
+            const searchWords = searchTerm.toLowerCase().split(' ');
+            // Check if each word is present in any part of the user's name
+            return searchWords.every(
+                (word) =>
+                    user.fname?.toLowerCase().includes(word) ||
+                    user.lname?.toLowerCase().includes(word) ||
+                    user.email?.toLowerCase().includes(word) ||
+                    user.phoneNumber?.toLowerCase().includes(word) ||
+                    user.userId?.toString().includes(word)
             );
         })
         .sort((a, b) => {
@@ -88,7 +93,7 @@ const StaffTable: React.FC<{
                 })
                 .catch((error) => {
                     console.error(error);
-                    showAlert('Failed to assign staff 😅', 'danger');
+                    showAlert('User is already STAFF 😅', 'danger');
                 });
             setModelAdd(false);
         } else if (role === Roles.Manager) {
@@ -100,7 +105,7 @@ const StaffTable: React.FC<{
                 })
                 .catch((error) => {
                     console.error(error);
-                    showAlert('User is already Manager 😅', 'danger');
+                    showAlert('User is already MANAGER 😅', 'danger');
                 });
             setModelAdd(false);
         } else {
@@ -112,7 +117,7 @@ const StaffTable: React.FC<{
                 })
                 .catch((error) => {
                     console.error(error);
-                    showAlert('User is already Staff 😅', 'danger');
+                    showAlert('Error removing user 😅', 'danger');
                 });
             setModelAdd(false);
         }
@@ -131,7 +136,7 @@ const StaffTable: React.FC<{
             })
             .catch((error) => {
                 console.error(error);
-                showAlert('Failed to add staff 😅', 'danger');
+                showAlert('User is already part of a Venue 😅', 'danger');
                 setModelAdd(false);
             });
     };
@@ -143,7 +148,7 @@ const StaffTable: React.FC<{
                     style={{
                         position: 'absolute',
                         top: '20px',
-                        left: '43%',
+                        right: '40px',
                         fontWeight: 'bold',
                         padding: '10px',
                         fontSize: '16px',
