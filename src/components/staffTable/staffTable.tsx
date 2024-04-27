@@ -14,7 +14,6 @@ import AddStaffModel from '../model/addStaffModel';
 const StaffTable: React.FC<{
     userData: AllUserVenueDTO[];
     venueId: number;
-
     reRenderList: () => void;
 }> = ({ userData, venueId, reRenderList }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,10 +25,6 @@ const StaffTable: React.FC<{
     const [alertVariant, setAlerVariant] = useState('');
 
     const ITEMSPERPAGE = 5;
-
-    const indexOfLastItem = currentPage * ITEMSPERPAGE;
-    const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
-    const currentItems = userData.slice(indexOfFirstItem, indexOfLastItem);
 
     const paginate = (pageNumber: number): void => setCurrentPage(pageNumber);
 
@@ -48,7 +43,7 @@ const StaffTable: React.FC<{
         setCurrentPage(1);
     };
 
-    const filteredItems = currentItems
+    const filteredItems = userData
         .filter((user) => {
             return (
                 user.fname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -62,6 +57,9 @@ const StaffTable: React.FC<{
             const userIdB = b.userId || 0;
             return userIdA - userIdB;
         });
+    const indexOfLastItem = currentPage * ITEMSPERPAGE;
+    const indexOfFirstItem = indexOfLastItem - ITEMSPERPAGE;
+    const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
     const handleEditUser = (user: number): void => {
         setSelectedUser(user);
@@ -204,7 +202,7 @@ const StaffTable: React.FC<{
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredItems.map((user, index) => (
+                            {currentItems.map((user, index) => (
                                 <tr key={index}>
                                     <td
                                         className="text-center"
@@ -262,26 +260,28 @@ const StaffTable: React.FC<{
                     </Table>
                 )}
 
-                <div className="d-flex justify-content-center">
-                    <Pagination>
-                        {Array.from(
-                            {
-                                length: Math.ceil(
-                                    userData.length / ITEMSPERPAGE
-                                ),
-                            },
-                            (_, i) => (
-                                <Pagination.Item
-                                    key={i}
-                                    active={i + 1 === currentPage}
-                                    onClick={() => paginate(i + 1)}
-                                >
-                                    {i + 1}
-                                </Pagination.Item>
-                            )
-                        )}
-                    </Pagination>
-                </div>
+                {filteredItems.length > ITEMSPERPAGE && (
+                    <div className="d-flex justify-content-center">
+                        <Pagination>
+                            {Array.from(
+                                {
+                                    length: Math.ceil(
+                                        filteredItems.length / ITEMSPERPAGE
+                                    ),
+                                },
+                                (_, i) => (
+                                    <Pagination.Item
+                                        key={i}
+                                        active={i + 1 === currentPage}
+                                        onClick={() => paginate(i + 1)}
+                                    >
+                                        {i + 1}
+                                    </Pagination.Item>
+                                )
+                            )}
+                        </Pagination>
+                    </div>
+                )}
                 <EditStaffModel
                     show={model}
                     handleClose={handleClose}

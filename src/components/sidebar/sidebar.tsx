@@ -56,8 +56,8 @@ const Sidebar: React.FC<SidebarProps> = ({ navItems }) => {
                 top: '0',
                 left: '0',
                 height: '100%',
-                overflowY: 'auto', // Enable vertical scrolling
-                zIndex: 1000, // Ensure the sidebar is above other content
+                overflowY: 'auto',
+                zIndex: 1000,
             }}
         >
             {loading ? (
