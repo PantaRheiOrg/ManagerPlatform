@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { UserDTO } from '../../models/IUser';
+import { AllUserVenueDTO } from '../../models/IUser';
 import Table from 'react-bootstrap/Table';
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencil, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { Pagination, Form } from 'react-bootstrap'; // Import Modal and Button
+import { Pagination, Form } from 'react-bootstrap';
 import EditStaffModel from '../model/editStaffModel';
 import '../../css/staffTable.css';
+import UserVenueService from '../../services/userVenue.service';
+import { Roles } from '../../models/IUserVenue';
 
-const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
+const StaffTable: React.FC<{
+    userData: AllUserVenueDTO[];
+    venueId: number;
+    reRenderList: () => void;
+}> = ({ userData, venueId, reRenderList }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedUser, setSelectedUser] = useState<number | undefined>();
+    const [selectedUser, setSelectedUser] = useState<number>();
     const [model, setModel] = useState(false);
     const ITEMSPERPAGE = 5;
 
@@ -37,27 +43,59 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
         event: React.ChangeEvent<HTMLInputElement>
     ): void => {
         setSearchTerm(event.target.value);
-        setCurrentPage(1); // Reset to first page when searching
+        setCurrentPage(1);
     };
 
-    const filteredItems = currentItems.filter((user) => {
-        return (
-            user.fname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.lname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.phoneNumber?.includes(searchTerm)
-        );
-    });
+    const filteredItems = currentItems
+        .filter((user) => {
+            return (
+                user.fname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.lname?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                user.phoneNumber?.includes(searchTerm)
+            );
+        })
+        .sort((a, b) => {
+            const userIdA = a.userId || 0;
+            const userIdB = b.userId || 0;
+            return userIdA - userIdB;
+        });
 
-    const handleEditUser = (user: number | undefined): void => {
+    const handleEditUser = (user: number): void => {
         setSelectedUser(user);
         setModel(true);
     };
+
     const handleClose = (): void => {
         setModel(false);
     };
-    const handleSave = (userId: number | undefined): void => {
-        console.log('saved user id ' + userId);
+
+    const handleSave = (role: Roles | null): void => {
+        const userVenueService = new UserVenueService();
+
+        if (role === Roles.Staff) {
+            userVenueService
+                .setVenueStaff(selectedUser!, venueId)
+                .catch((error) => {
+                    console.error(error);
+                });
+            reRenderList();
+        } else if (role === Roles.Manager) {
+            userVenueService
+                .setVenueManager(selectedUser!, venueId)
+                .catch((error) => {
+                    console.error(error);
+                });
+            reRenderList();
+        } else {
+            userVenueService
+                .removeVenueStaff(selectedUser!, venueId)
+                .catch((error) => {
+                    console.error(error);
+                });
+            reRenderList();
+        }
+
         setModel(false);
     };
 
@@ -126,10 +164,20 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
                                 <td>{user.email}</td>
                                 <td>{user.phoneNumber}</td>
                                 <td>
+                                    {user.venueRole === 'VENUE_STAFF_ROLE' ? (
+                                        <span>Staff</span>
+                                    ) : user.venueRole ===
+                                      'VENUE_MANAGER_ROLE' ? (
+                                        <span>Manager</span>
+                                    ) : (
+                                        <span>Admin</span>
+                                    )}
+                                </td>
+                                <td>
                                     <FontAwesomeIcon
                                         icon={faPencil}
                                         onClick={() =>
-                                            handleEditUser(user.userId)
+                                            handleEditUser(user.userId!)
                                         } // Call handleEditUser on click
                                         style={{ cursor: 'pointer' }} // Add cursor pointer
                                     />
@@ -157,7 +205,6 @@ const StaffTable: React.FC<{ userData: UserDTO[] }> = ({ userData }) => {
                 </Pagination>
             </div>
             <EditStaffModel
-                userId={selectedUser}
                 show={model}
                 handleClose={handleClose}
                 handleSave={handleSave}

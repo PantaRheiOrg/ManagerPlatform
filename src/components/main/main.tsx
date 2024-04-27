@@ -7,37 +7,43 @@ import LocationInfo from '../locationInfo/locationInfo';
 import MenuInfo from '../menuInfo/menuInfo';
 import VenueInfo from '../venueInfo/venueInfo';
 import StaffTable from '../staffTable/staffTable';
-import '../../css/main.css'; // Import CSS file for custom styling
-import { UserDTO } from '../../models/IUser';
+import '../../css/main.css';
+import { AllUserVenueDTO } from '../../models/IUser';
 import ReviewCard from '../reviewCard/reviewCard';
 
 const Main: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [venueData, setVenueData] = useState<VenueDTO | null>(null);
-    const [userData, setUserData] = useState<UserDTO[]>([]); // Assuming UserDTO is the type for user data
+    const [userData, setUserData] = useState<AllUserVenueDTO[]>([]);
     useEffect(() => {
-        const fetchVenueData = async () => {
-            try {
-                if (localStorage.getItem('token')) {
-                    const venueService = new VenueService();
-                    const data = await venueService.getVenueByToken();
-                    setVenueData(data);
-                    const userVenueService = new UserVenueService();
-                    const userDataResponse =
-                        await userVenueService.getVenueByToken(data.venueId);
-                    setUserData(userDataResponse);
-                } else {
-                    throw new Error('Token not found');
-                }
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching venue data:', error);
-                setLoading(false);
-            }
-        };
-
         fetchVenueData();
     }, []);
+
+    const fetchVenueData = async () => {
+        try {
+            if (localStorage.getItem('token')) {
+                const venueService = new VenueService();
+                const data = await venueService.getVenueByToken();
+                setVenueData(data);
+                const userVenueService = new UserVenueService();
+                let userDataResponse =
+                    await userVenueService.getVenueUsersbById(data.venueId);
+                userDataResponse = userDataResponse.sort((a, b) => {
+                    const userIdA = a.userId || 0;
+                    const userIdB = b.userId || 0;
+                    return userIdA - userIdB;
+                });
+                setUserData(userDataResponse);
+            } else {
+                throw new Error('Token not found');
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching venue data:', error);
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="main-container">
             {loading ? (
@@ -64,7 +70,11 @@ const Main: React.FC = () => {
                             </div>
                         </div>
                         <div className="col-md-6">
-                            <StaffTable userData={userData}></StaffTable>
+                            <StaffTable
+                                userData={userData}
+                                reRenderList={fetchVenueData}
+                                venueId={venueData.venueId}
+                            ></StaffTable>
                         </div>
                     </div>
                     <VenueInfo venueData={venueData} />

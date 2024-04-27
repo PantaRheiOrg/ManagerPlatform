@@ -1,24 +1,21 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
+import { Roles } from '../../models/IUserVenue';
 interface EditStaffModelProps {
-    userId: number | undefined;
     show: boolean;
     handleClose: () => void;
-    handleSave: (userId: number | undefined) => void;
+    handleSave: (role: Roles | null) => void;
 }
 
 const EditStaffModel: React.FC<EditStaffModelProps> = ({
-    userId,
     show,
     handleClose,
     handleSave,
 }) => {
     return (
         <>
-            <Button variant="primary">Launch demo modal</Button>
-
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Modal heading</Modal.Title>
@@ -27,14 +24,20 @@ const EditStaffModel: React.FC<EditStaffModelProps> = ({
                     Woohoo, you are reading this text in a modal!
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
+                    <Button
+                        variant="warning"
+                        onClick={() => handleSave(Roles.Staff)}
+                    >
+                        Update to Staff
                     </Button>
                     <Button
-                        variant="primary"
-                        onClick={() => handleSave(userId)}
+                        variant="warning"
+                        onClick={() => handleSave(Roles.Manager)}
                     >
-                        Save Changes
+                        Update to Manager
+                    </Button>
+                    <Button variant="danger" onClick={() => handleSave(null)}>
+                        Remove User
                     </Button>
                 </Modal.Footer>
             </Modal>
