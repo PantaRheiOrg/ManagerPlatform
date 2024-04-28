@@ -33,7 +33,7 @@ const StaffTable: React.FC<{
         setAlerVariant(variant);
         setTimeout(() => {
             setAlertMessage('');
-        }, 2000);
+        }, 1500);
     };
 
     const handleSearchChange = (

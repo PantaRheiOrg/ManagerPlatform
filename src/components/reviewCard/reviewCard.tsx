@@ -1,21 +1,29 @@
 import React from 'react';
 
 import Card from 'react-bootstrap/Card';
+import { VenueDTO } from '../../models/IVenue';
 
-const ReviewCard: React.FC = () => {
+const ReviewCard: React.FC<{ venueData: VenueDTO }> = ({ venueData }) => {
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card className="venue-card">
             <Card.Body>
-                <Card.Title>Card Title</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                    Card Subtitle
-                </Card.Subtitle>
-                <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the content.
+                <Card.Title className="venue-name">{venueData.name}</Card.Title>
+                <div className="venue-info">
+                    <div className="venue-rating">
+                        <span className="label">Rating:</span>{' '}
+                        {venueData.rating}
+                    </div>
+                    <div className="venue-price-rating">
+                        <span className="label">Price Rating:</span>{' '}
+                        {venueData.priceRating}
+                    </div>
+                </div>
+                <Card.Text className="venue-description">
+                    {venueData.description}
                 </Card.Text>
-                <Card.Link href="#">Card Link</Card.Link>
-                <Card.Link href="#">Another Link</Card.Link>
+                <Card.Link href="#" className="venue-link">
+                    View Details
+                </Card.Link>
             </Card.Body>
         </Card>
     );

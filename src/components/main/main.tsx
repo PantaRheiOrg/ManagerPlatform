@@ -53,22 +53,23 @@ const Main: React.FC = () => {
                     <div className="row custom-height-md">
                         <div className="col-md-6">
                             <div className="row mb-5 mt-4">
-                                <div className="col-md-6">
-                                    <ReviewCard />
+                                <div className="col-md-6 ">
+                                    <ReviewCard venueData={venueData} />
                                 </div>
                                 <div className="col-md-6">
-                                    <ReviewCard />
+                                    <ReviewCard venueData={venueData} />
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="col-md-6">
-                                    <ReviewCard />
+                                <div className="col-md-6 ">
+                                    <ReviewCard venueData={venueData} />
                                 </div>
-                                <div className="col-md-6">
-                                    <ReviewCard />
+                                <div className="col-md-6 ">
+                                    <ReviewCard venueData={venueData} />
                                 </div>
                             </div>
                         </div>
+
                         <div className="col-md-6">
                             <StaffTable
                                 userData={userData}
