@@ -9,6 +9,7 @@ import createAxiosClient from '../conf/axiosInstance';
 import { AxiosInstance } from 'axios';
 
 const resourceUser: string = 'user/users';
+const resourceUserByToken: string = 'auth/user';
 const resourceAuthenticate: string = 'auth/authenticate';
 const resourceRegister: string = 'auth/register';
 
@@ -34,6 +35,10 @@ class UserService {
 
     async getUser(id: number | null): Promise<string | UserDTO[] | UserDTO> {
         const response = await this.axiosClient.get(`/${resourceUser}/${id}`);
+        return response.data;
+    }
+    async getUserByToken(): Promise<string | UserDTO> {
+        const response = await this.axiosClient.get(`/${resourceUserByToken}`);
         return response.data;
     }
 

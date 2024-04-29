@@ -30,14 +30,26 @@ export interface UserUpdateDTO {
 }
 
 export interface UserDTO {
-    id?: number;
+    userId?: number;
     email?: string;
-    fName?: string;
-    lName?: string;
+    fname?: string;
+    lname?: string;
     phoneNumber?: string;
     phoneCountryCode?: string;
     image?: string;
     birthDate?: Date;
+    role?: string;
+}
+export interface AllUserVenueDTO {
+    userId?: number;
+    email?: string;
+    fname?: string;
+    lname?: string;
+    phoneNumber?: string;
+    phoneCountryCode?: string;
+    image?: string;
+    birthDate?: Date;
+    venueRole?: string;
     role?: string;
 }
 
