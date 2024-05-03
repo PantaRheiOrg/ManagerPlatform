@@ -24,3 +24,8 @@ export interface VenueDTO {
     types: string[];
     menus: MenuDTO[];
 }
+
+export enum Type {
+    VENUE = 'venue',
+    LOCATION = 'location',
+}

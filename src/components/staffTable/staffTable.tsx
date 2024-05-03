@@ -45,9 +45,8 @@ const StaffTable: React.FC<{
 
     const filteredItems = userData
         .filter((user) => {
-            // Split the search term into separate words
             const searchWords = searchTerm.toLowerCase().split(' ');
-            // Check if each word is present in any part of the user's name
+
             return searchWords.every(
                 (word) =>
                     user.fname?.toLowerCase().includes(word) ||
@@ -192,7 +191,7 @@ const StaffTable: React.FC<{
                     </Form.Group>
                 </div>
 
-                {filteredItems.length === 0 ? ( // Check if no items are found after filtering
+                {filteredItems.length === 0 ? (
                     <div className="py-5 text-center">No user found.</div>
                 ) : (
                     <Table bordered hover responsive="sm">
@@ -255,8 +254,8 @@ const StaffTable: React.FC<{
                                             icon={faPencil}
                                             onClick={() =>
                                                 handleEditUser(user.userId!)
-                                            } // Call handleEditUser on click
-                                            style={{ cursor: 'pointer' }} // Add cursor pointer
+                                            }
+                                            style={{ cursor: 'pointer' }}
                                         />
                                     </td>
                                 </tr>
