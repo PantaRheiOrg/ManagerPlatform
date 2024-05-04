@@ -10,11 +10,19 @@ import StaffTable from '../staffTable/staffTable';
 import '../../css/main.css';
 import { AllUserVenueDTO } from '../../models/IUser';
 import ReviewCard from '../reviewCard/reviewCard';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const Main: React.FC = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(true);
     const [venueData, setVenueData] = useState<VenueDTO | null>(null);
     const [userData, setUserData] = useState<AllUserVenueDTO[]>([]);
+
+    const openEditVenuePage = (): void => {
+        navigate('/editVenue');
+    };
+
     useEffect(() => {
         fetchVenueData();
     }, []);
@@ -103,6 +111,9 @@ const Main: React.FC = () => {
                                     loading="lazy"
                                 ></iframe>
                             </div>
+                        </div>
+                        <div>
+                            <Button onClick={openEditVenuePage}></Button>
                         </div>
                     </div>
                 </>
